@@ -929,21 +929,44 @@ function logActivity(activity,record,details){
    NAVIGATION
 ========================================= */
 
-function showPage(pageId,button){
- document.querySelectorAll(".page").forEach(page=>{
-  page.classList.remove("active");
- });
- const target=byId(pageId);
- if(target)target.classList.add("active");
+function showPage(pageId, button) {
+  const target = byId(pageId);
 
- document.querySelectorAll(".nav-button").forEach(btn=>{
-  btn.classList.remove("active");
- });
- if(button)button.classList.add("active");
+  if (!target) {
+    console.error("SENGA page not found:", pageId);
+    return;
+  }
 
- window.scrollTo({top:0,behavior:"smooth"});
- refreshDashboard();
+  document.querySelectorAll(".page").forEach(page => {
+    page.classList.remove("active");
+  });
+
+  target.classList.add("active");
+
+  document.querySelectorAll(".nav-btn").forEach(btn => {
+    btn.classList.remove("active");
+  });
+
+  if (button) {
+    button.classList.add("active");
+  }
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+
+  if (typeof refreshDashboard === "function") {
+    refreshDashboard();
+  }
 }
+
+// Connect sidebar buttons to their respective pages.
+document.querySelectorAll(".nav-btn").forEach(button => {
+  button.addEventListener("click", function() {
+    showPage(this.dataset.page, this);
+  });
+});
 
 function setLanguage(language){
  localStorage.setItem("SENGA_LANGUAGE",language);
