@@ -1,0 +1,2111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#101827">
+<title>SENGA | Operations & Management Command Centre</title>
+<style>
+:root{
+  --navy:#101827;
+  --navy2:#17243a;
+  --panel:#1c2b42;
+  --panel2:#223650;
+  --gold:#d5a63b;
+  --gold2:#f0ca70;
+  --cream:#f7f4eb;
+  --muted:#aab7c8;
+  --green:#1fa67a;
+  --red:#df6262;
+  --blue:#4e91d9;
+  --line:rgba(255,255,255,.12);
+  --shadow:0 12px 32px rgba(0,0,0,.22);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  background:var(--navy);
+  color:var(--cream);
+  font-family:Arial,Helvetica,sans-serif;
+  font-size:14px;
+}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+a{color:inherit;text-decoration:none}
+.app{min-height:100vh;display:flex}
+.sidebar{
+  width:265px;flex:0 0 265px;background:#0b1220;
+  border-right:1px solid var(--line);padding:20px 14px;
+  height:100vh;position:sticky;top:0;overflow-y:auto;
+}
+.brand{padding:10px 12px 20px;border-bottom:1px solid var(--line)}
+.brand-mark{
+  width:42px;height:42px;border-radius:12px;
+  display:inline-flex;align-items:center;justify-content:center;
+  background:var(--gold);color:#111827;font-size:22px;font-weight:900;
+  margin-right:10px;vertical-align:middle;
+}
+.brand-name{font-size:23px;font-weight:900;letter-spacing:2px}
+.brand-sub{color:var(--muted);font-size:10px;letter-spacing:1.5px;margin:8px 0 0 54px}
+.nav-label{
+  color:#71829a;font-size:10px;font-weight:800;letter-spacing:1.5px;
+  padding:20px 12px 8px;text-transform:uppercase
+}
+.nav-btn{
+  display:flex;align-items:center;gap:10px;width:100%;
+  padding:11px 12px;border:0;border-radius:8px;
+  background:transparent;color:#c9d3df;text-align:left;margin:3px 0;
+}
+.nav-btn:hover,.nav-btn.active{background:var(--panel2);color:var(--gold2)}
+.nav-btn.active{border-left:3px solid var(--gold)}
+.nav-icon{width:22px;text-align:center;color:var(--gold2)}
+.main{flex:1;min-width:0}
+.topbar{
+  min-height:68px;padding:14px 25px;border-bottom:1px solid var(--line);
+  display:flex;align-items:center;justify-content:space-between;gap:15px;
+  background:rgba(11,18,32,.85);position:sticky;top:0;z-index:10;
+}
+.topbar-title{font-weight:800;font-size:16px}
+.topbar-right{display:flex;align-items:center;gap:14px;color:var(--muted)}
+.clock{font-variant-numeric:tabular-nums}
+.content{padding:25px;max-width:1600px;margin:auto}
+.page{display:none}
+.page.active{display:block}
+.page-heading{
+  display:flex;justify-content:space-between;align-items:flex-start;
+  gap:15px;margin-bottom:22px;flex-wrap:wrap
+}
+h1{font-size:25px;margin:0 0 7px}
+h2{font-size:18px;margin:0 0 14px}
+h3{font-size:15px;margin:0 0 12px}
+.subtitle{color:var(--muted);line-height:1.5}
+.grid{display:grid;gap:15px}
+.grid-4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.card{
+  background:var(--panel);border:1px solid var(--line);
+  border-radius:13px;padding:18px;box-shadow:var(--shadow);min-width:0
+}
+.stat-label{font-size:12px;color:var(--muted)}
+.stat-value{font-size:27px;font-weight:900;margin-top:9px}
+.stat-note{font-size:11px;color:var(--muted);margin-top:5px}
+.stat-icon{float:right;font-size:22px;color:var(--gold2)}
+.gold{color:var(--gold2)}
+.muted{color:var(--muted)}
+.btn{
+  border:1px solid var(--line);border-radius:8px;padding:10px 14px;
+  background:var(--panel2);color:var(--cream);font-weight:700
+}
+.btn:hover{filter:brightness(1.15)}
+.btn-primary{background:var(--gold);color:#171717;border-color:var(--gold)}
+.btn-danger{background:#632e38;border-color:#8e414d}
+.btn-success{background:#145b49;border-color:#218b6d}
+.btn-small{padding:6px 9px;font-size:11px}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+.field{display:flex;flex-direction:column;gap:6px;min-width:0}
+.field.full{grid-column:1/-1}
+label{font-size:12px;color:#cbd5e1;font-weight:700}
+input,select,textarea{
+  width:100%;background:#101c2e;color:var(--cream);
+  border:1px solid #3b4d65;border-radius:7px;padding:10px 11px;
+  outline:none;min-width:0
+}
+input:focus,select:focus,textarea:focus{border-color:var(--gold)}
+textarea{min-height:85px;resize:vertical}
+input[type="file"]{padding:8px}
+.table-wrap{width:100%;overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:700px}
+th,td{padding:11px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{font-size:11px;color:var(--gold2);text-transform:uppercase;letter-spacing:.5px}
+td{font-size:12px;color:#e0e7ef}
+.empty{text-align:center;color:var(--muted);padding:24px}
+.badge{
+  display:inline-block;border-radius:20px;padding:4px 8px;
+  font-size:10px;font-weight:800;background:#34445b;color:#dce7f4
+}
+.badge-green{background:#155b49;color:#b8f0dc}
+.badge-red{background:#65313b;color:#ffd0d0}
+.badge-gold{background:#5e4a20;color:#ffe2a0}
+.section-gap{margin-top:20px}
+.hero{
+  display:grid;grid-template-columns:1.15fr .85fr;gap:20px;
+  align-items:center;background:linear-gradient(120deg,#1c2b42,#263c58);
+  border:1px solid var(--line);border-radius:16px;padding:22px;margin-bottom:20px
+}
+.hero h1{font-size:30px;line-height:1.15}
+.hero p{color:#c1ccda;line-height:1.6;max-width:650px}
+.hero-photo{
+  width:100%;height:220px;object-fit:cover;border-radius:12px;
+  border:1px solid rgba(255,255,255,.2);background:#101827
+}
+.unit-card{border-top:3px solid var(--gold)}
+.unit-card p{color:var(--muted);font-size:12px;line-height:1.5}
+.unit-card .actions{margin-top:12px}
+.service-item{
+  padding:12px;background:#17243a;border:1px solid var(--line);
+  border-radius:9px;font-weight:700;font-size:12px
+}
+.toast{
+  position:fixed;right:20px;bottom:20px;z-index:99;
+  background:#1d6b53;color:white;padding:12px 18px;border-radius:8px;
+  box-shadow:var(--shadow);display:none;max-width:90vw
+}
+.mobile-menu{display:none}
+hr{border:0;border-top:1px solid var(--line);margin:18px 0}
+@media(max-width:1050px){
+  .grid-4{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .grid-3{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:760px){
+  .app{display:block}
+  .sidebar{display:none;width:100%;height:auto;position:relative}
+  .sidebar.open{display:block}
+  .mobile-menu{display:inline-block}
+  .topbar{padding:12px 15px}
+  .content{padding:15px}
+  .grid-4,.grid-3,.grid-2,.form-grid,.hero{grid-template-columns:1fr}
+  .hero h1{font-size:24px}
+  .topbar-right .clock{display:none}
+  .page-heading{display:block}
+  .page-heading .actions{margin-top:12px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="sidebar" id="sidebar">
+  <div class="brand">
+    <span class="brand-mark">S</span><span class="brand-name">SENGA</span>
+    <div class="brand-sub">OPERATIONS COMMAND CENTRE</div>
+  </div>
+
+  <div class="nav-label">Command</div>
+  <button class="nav-btn active" data-page="dashboard"><span class="nav-icon">⌂</span>Command Centre</button>
+  <button class="nav-btn" data-page="services"><span class="nav-icon">✦</span>All 16 Services</button>
+  <button class="nav-btn" data-page="units"><span class="nav-icon">▦</span>Management Units</button>
+
+  <div class="nav-label">Customer Operations</div>
+  <button class="nav-btn" data-page="customers"><span class="nav-icon">♙</span>Customer Register</button>
+  <button class="nav-btn" data-page="requests"><span class="nav-icon">☷</span>Service Requests</button>
+  <button class="nav-btn" data-page="bookings"><span class="nav-icon">▣</span>Bookings & Calendar</button>
+  <button class="nav-btn" data-page="contracts"><span class="nav-icon">▤</span>Contracts</button>
+
+  <div class="nav-label">Finance</div>
+  <button class="nav-btn" data-page="payments"><span class="nav-icon">＄</span>Payments</button>
+  <button class="nav-btn" data-page="reconciliation"><span class="nav-icon">⇄</span>Bank Reconciliation</button>
+
+  <div class="nav-label">Administration</div>
+  <button class="nav-btn" data-page="geography"><span class="nav-icon">◎</span>Countries & Regions</button>
+  <button class="nav-btn" data-page="travel"><span class="nav-icon">➤</span>Travel & Logistics</button>
+  <button class="nav-btn" data-page="legal"><span class="nav-icon">⚖</span>LEGAL360</button>
+  <button class="nav-btn" data-page="media"><span class="nav-icon">▣</span>Media Library</button>
+  <button class="nav-btn" data-page="reports"><span class="nav-icon">▥</span>Reports & Records</button>
+</aside>
+
+<div class="main">
+<header class="topbar">
+  <div style="display:flex;align-items:center;gap:12px">
+    <button class="btn mobile-menu" id="menuToggle" type="button">☰</button>
+    <div class="topbar-title" id="pageTitle">SENGA Command Centre</div>
+  </div>
+  <div class="topbar-right">
+    <span id="systemStatus"><span class="badge badge-green">SYSTEM READY</span></span>
+    <span class="clock" id="clock">--:--:--</span>
+  </div>
+</header>
+
+<main class="content">
+
+<section class="page active" id="dashboard">
+  <div class="hero">
+    <div>
+      <div class="gold" style="font-size:11px;font-weight:900;letter-spacing:2px">SENGA OPERATIONS PLATFORM</div>
+      <h1>Operations & Management Command Centre</h1>
+      <p>Centralised management of services, customers, bookings, contracts, payments, country operations, legal records and media assets.</p>
+      <div class="actions">
+        <button class="btn btn-primary" type="button" onclick="showPage('requests')">Create Service Request</button>
+        <button class="btn" type="button" onclick="showPage('customers')">Register Customer</button>
+      </div>
+    </div>
+    <div>
+      <img class="hero-photo" src="senga-homepage.jpg" alt="Senga homepage portrait"
+           onerror="this.style.display='none';">
+      <div class="muted" style="font-size:10px;margin-top:6px">Homepage portrait asset: senga-homepage.jpg</div>
+    </div>
+  </div>
+
+  <div class="grid grid-4">
+    <div class="card"><span class="stat-icon">♙</span><div class="stat-label">Registered Customers</div><div class="stat-value" id="statCustomers">0</div><div class="stat-note">Customer register</div></div>
+    <div class="card"><span class="stat-icon">☷</span><div class="stat-label">Service Requests</div><div class="stat-value" id="statRequests">0</div><div class="stat-note">All request statuses</div></div>
+    <div class="card"><span class="stat-icon">▣</span><div class="stat-label">Bookings</div><div class="stat-value" id="statBookings">0</div><div class="stat-note">Booking register</div></div>
+    <div class="card"><span class="stat-icon">▤</span><div class="stat-label">Contracts</div><div class="stat-value" id="statContracts">0</div><div class="stat-note">Contract register</div></div>
+    <div class="card"><span class="stat-icon">＄</span><div class="stat-label">Payments Recorded</div><div class="stat-value" id="statPayments">0</div><div class="stat-note">Payment transactions</div></div>
+    <div class="card"><span class="stat-icon">▣</span><div class="stat-label">Media Assets</div><div class="stat-value" id="statMedia">0</div><div class="stat-note">Stored media records</div></div>
+    <div class="card"><span class="stat-icon">◷</span><div class="stat-label">Outstanding Balance</div><div class="stat-value" id="statOutstanding">0</div><div class="stat-note">Recorded balances</div></div>
+    <div class="card"><span class="stat-icon">◎</span><div class="stat-label">Operating Countries</div><div class="stat-value">8</div><div class="stat-note">East and Southern Africa</div></div>
+  </div>
+
+  <div class="grid grid-2 section-gap">
+    <div class="card">
+      <h2>Latest Service Requests</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Request No.</th><th>Customer</th><th>Service</th><th>Status</th></tr></thead>
+          <tbody id="dashboardRecentRequests"><tr><td colspan="4" class="empty">No service requests recorded.</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <h2>Operational Shortcuts</h2>
+      <div class="grid grid-2">
+        <button class="btn" type="button" onclick="showPage('bookings')">Bookings & Calendar</button>
+        <button class="btn" type="button" onclick="showPage('payments')">Record Payment</button>
+        <button class="btn" type="button" onclick="showPage('legal')">Open LEGAL360</button>
+        <button class="btn" type="button" onclick="showPage('media')">Upload Media</button>
+        <button class="btn" type="button" onclick="showPage('reconciliation')">Reconcile Bank</button>
+        <button class="btn" type="button" onclick="showPage('reports')">Reports & Export</button>
+      </div>
+    </div>
+  </div>
+</section>
+<section id="customers" class="page">
+ <div class="page-heading"><h2>Customer Registration</h2></div>
+ <div class="panel">
+  <h3>Register New Customer</h3>
+  <form id="customerForm">
+   <div class="form-grid">
+    <div class="field"><label>Customer Type</label>
+     <select id="customerType" required>
+      <option value="Individual">Individual</option>
+      <option value="Company">Company</option>
+      <option value="Organisation">Organisation</option>
+     </select>
+    </div>
+    <div class="field"><label>Full Name / Organisation</label><input id="customerName" required></div>
+    <div class="field"><label>Telephone</label><input id="customerPhone" required></div>
+    <div class="field"><label>Email</label><input id="customerEmail" type="email"></div>
+    <div class="field"><label>Country</label><select id="customerCountry" required></select></div>
+    <div class="field"><label>Region / Province</label><select id="customerRegion"></select></div>
+    <div class="field"><label>City / Municipality / District</label><select id="customerDistrict"></select></div>
+    <div class="field"><label>Town / Area</label><input id="customerTown"></div>
+    <div class="field"><label>Ward</label><input id="customerWard"></div>
+    <div class="field"><label>Street / Mtaa</label><input id="customerStreet"></div>
+    <div class="field full"><label>Physical Address</label><textarea id="customerAddress"></textarea></div>
+    <div class="field full"><label>Additional Notes</label><textarea id="customerNotes"></textarea></div>
+   </div>
+   <div class="actions">
+    <button class="btn btn-gold" type="submit">Save Customer</button>
+    <button class="btn btn-light" type="reset">Clear</button>
+   </div>
+  </form>
+ </div>
+ <div class="panel">
+  <h3>Customer Register</h3>
+  <div class="table-wrap"><table>
+   <thead><tr><th>Customer No.</th><th>Name</th><th>Type</th><th>Telephone</th><th>Country</th><th>Location</th><th>Date</th><th>Action</th></tr></thead>
+   <tbody id="customerTable"></tbody>
+  </table></div>
+ </div>
+</section>
+
+<section id="requests" class="page">
+ <div class="page-heading"><h2>Service Request Register</h2></div>
+ <div class="panel">
+  <h3>Register Service Request</h3>
+  <form id="requestForm">
+   <div class="form-grid">
+    <div class="field"><label>Customer</label><select id="requestCustomer" required></select></div>
+    <div class="field"><label>Service</label><select id="requestService" required></select></div>
+    <div class="field"><label>Country</label><select id="requestCountry" required></select></div>
+    <div class="field"><label>Region</label><select id="requestRegion"></select></div>
+    <div class="field"><label>District / City</label><select id="requestDistrict"></select></div>
+    <div class="field"><label>Service Area</label><input id="requestArea" required></div>
+    <div class="field"><label>Request Date</label><input type="date" id="requestDate" required></div>
+    <div class="field"><label>Service Fees</label><input type="number" id="requestFees" min="0" step="0.01" required></div>
+    <div class="field"><label>Currency</label><select id="requestCurrency" required></select></div>
+    <div class="field"><label>Responsible Unit</label><select id="requestUnit"></select></div>
+    <div class="field"><label>Priority</label><select id="requestPriority"><option>Normal</option><option>Urgent</option><option>Critical</option></select></div>
+    <div class="field"><label>Expected Completion</label><input type="date" id="requestDeadline"></div>
+    <div class="field full"><label>Request Description</label><textarea id="requestDescription" required></textarea></div>
+   </div>
+   <div class="actions"><button class="btn btn-gold" type="submit">Submit Request</button></div>
+  </form>
+ </div>
+ <div class="panel">
+  <h3>Service Request Register</h3>
+  <div class="table-wrap"><table>
+   <thead><tr><th>Number</th><th>Customer</th><th>Service</th><th>Area</th><th>Date</th><th>Fees</th><th>Status</th><th>Action</th></tr></thead>
+   <tbody id="requestTable"></tbody>
+  </table></div>
+ </div>
+</section>
+
+<section id="bookings" class="page">
+ <div class="page-heading"><h2>Booking Management</h2></div>
+ <div class="panel">
+  <h3>Create Booking</h3>
+  <form id="bookingForm">
+   <div class="form-grid">
+    <div class="field"><label>Customer</label><select id="bookingCustomer" required></select></div>
+    <div class="field"><label>Service Request</label><select id="bookingRequest"></select></div>
+    <div class="field"><label>Service</label><select id="bookingService" required></select></div>
+    <div class="field"><label>Booking Date</label><input type="date" id="bookingDate" required></div>
+    <div class="field"><label>Booking Time</label><input type="time" id="bookingTime" required></div>
+    <div class="field"><label>Country</label><select id="bookingCountry"></select></div>
+    <div class="field"><label>Location</label><input id="bookingLocation" required></div>
+    <div class="field"><label>Booking Fee</label><input type="number" id="bookingFee" min="0" step="0.01"></div>
+    <div class="field"><label>Currency</label><select id="bookingCurrency"></select></div>
+    <div class="field"><label>Assigned Unit</label><select id="bookingUnit"></select></div>
+    <div class="field full"><label>Booking Notes</label><textarea id="bookingNotes"></textarea></div>
+   </div>
+   <div class="actions"><button class="btn btn-gold" type="submit">Save Booking</button></div>
+  </form>
+ </div>
+ <div class="panel">
+  <h3>Booking Register</h3>
+  <div class="table-wrap"><table>
+   <thead><tr><th>Booking No.</th><th>Customer</th><th>Service</th><th>Date</th><th>Time</th><th>Location</th><th>Fee</th><th>Status</th><th>Action</th></tr></thead>
+   <tbody id="bookingTable"></tbody>
+  </table></div>
+ </div>
+</section>
+
+<section id="contracts" class="page">
+ <div class="page-heading"><h2>Contract Management</h2></div>
+ <div class="panel">
+  <h3>Register Contract</h3>
+  <form id="contractForm">
+   <div class="form-grid">
+    <div class="field"><label>Customer</label><select id="contractCustomer" required></select></div>
+    <div class="field"><label>Related Request</label><select id="contractRequest"></select></div>
+    <div class="field"><label>Contract Title</label><input id="contractTitle" required></div>
+    <div class="field"><label>Reference Number</label><input id="contractReference"></div>
+    <div class="field"><label>Contract Value</label><input type="number" id="contractValue" min="0" step="0.01" required></div>
+    <div class="field"><label>Currency</label><select id="contractCurrency"></select></div>
+    <div class="field"><label>Start Date</label><input type="date" id="contractStart" required></div>
+    <div class="field"><label>End Date</label><input type="date" id="contractEnd"></div>
+    <div class="field"><label>Responsible Unit</label><select id="contractUnit"></select></div>
+    <div class="field"><label>Status</label>
+     <select id="contractStatus">
+      <option>Draft</option><option>Under Review</option><option>Approved</option><option>Active</option><option>Completed</option><option>Terminated</option>
+     </select>
+    </div>
+    <div class="field full"><label>Contract Terms and Obligations</label><textarea id="contractTerms" required></textarea></div>
+    <div class="field full"><label>Signed Contract / Supporting Document</label><input type="file" id="contractFile" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"></div>
+   </div>
+   <div class="actions"><button class="btn btn-gold" type="submit">Register Contract</button></div>
+  </form>
+ </div>
+ <div class="panel">
+  <h3>Contract Register</h3>
+  <div class="table-wrap"><table>
+   <thead><tr><th>Contract No.</th><th>Customer</th><th>Title</th><th>Value</th><th>Start</th><th>End</th><th>Status</th><th>Document</th><th>Action</th></tr></thead>
+   <tbody id="contractTable"></tbody>
+  </table></div>
+ </div>
+</section>
+<section id="payments" class="page">
+ <div class="page-heading"><h2>Payments & Receipts</h2></div>
+ <div class="panel">
+  <h3>Record Customer Payment</h3>
+  <form id="paymentForm">
+   <div class="form-grid">
+    <div class="field"><label>Customer</label><select id="paymentCustomer" required></select></div>
+    <div class="field"><label>Related Request</label><select id="paymentRequest"></select></div>
+    <div class="field"><label>Related Contract</label><select id="paymentContract"></select></div>
+    <div class="field"><label>Payment Date</label><input type="date" id="paymentDate" required></div>
+    <div class="field"><label>Payment Amount</label><input type="number" id="paymentAmount" min="0.01" step="0.01" required></div>
+    <div class="field"><label>Currency</label><select id="paymentCurrency" required></select></div>
+    <div class="field"><label>Payment Method</label>
+     <select id="paymentMethod"><option>Bank Transfer</option><option>Mobile Money</option><option>Cash</option><option>Card</option><option>Cheque</option><option>Other</option></select>
+    </div>
+    <div class="field"><label>Bank / Mobile Provider</label><input id="paymentBank"></div>
+    <div class="field"><label>Transaction Reference</label><input id="paymentReference"></div>
+    <div class="field"><label>Payment Type</label>
+     <select id="paymentType"><option>Deposit</option><option>Partial Payment</option><option>Final Payment</option><option>Full Payment</option><option>Refund</option></select>
+    </div>
+    <div class="field full"><label>Payment Description</label><textarea id="paymentDescription"></textarea></div>
+   </div>
+   <div class="actions"><button class="btn btn-gold" type="submit">Save Payment</button></div>
+  </form>
+ </div>
+ <div class="panel">
+  <h3>Payment Register</h3>
+  <div class="table-wrap"><table>
+   <thead><tr><th>Receipt No.</th><th>Customer</th><th>Date</th><th>Amount</th><th>Currency</th><th>Method</th><th>Reference</th><th>Action</th></tr></thead>
+   <tbody id="paymentTable"></tbody>
+  </table></div>
+ </div>
+</section>
+
+<section id="reconciliation" class="page">
+ <div class="page-heading"><h2>Bank Reconciliation</h2></div>
+ <div class="panel">
+  <h3>Record Bank Conversion / Reconciliation</h3>
+  <form id="reconciliationForm">
+   <div class="form-grid">
+    <div class="field"><label>Transaction Reference</label><input id="reconReference" required></div>
+    <div class="field"><label>Transaction Date</label><input type="date" id="reconDate" required></div>
+    <div class="field"><label>Customer</label><select id="reconCustomer"></select></div>
+    <div class="field"><label>Source Currency</label><select id="reconSourceCurrency"></select></div>
+    <div class="field"><label>Source Amount</label><input type="number" id="reconSourceAmount" min="0" step="0.01" required></div>
+    <div class="field"><label>Exchange Rate</label><input type="number" id="reconRate" min="0" step="0.000001" required></div>
+    <div class="field"><label>Destination Currency</label><select id="reconDestinationCurrency"></select></div>
+    <div class="field"><label>Converted Amount</label><input type="number" id="reconConvertedAmount" readonly></div>
+    <div class="field"><label>Bank Charges</label><input type="number" id="reconCharges" min="0" step="0.01" value="0"></div>
+    <div class="field"><label>Bank Account</label><input id="reconAccount"></div>
+    <div class="field"><label>Reconciliation Status</label>
+     <select id="reconStatus"><option>Pending</option><option>Matched</option><option>Discrepancy</option><option>Approved</option></select>
+    </div>
+    <div class="field"><label>Bank Statement Reference</label><input id="reconStatement"></div>
+    <div class="field full"><label>Reconciliation Notes</label><textarea id="reconNotes"></textarea></div>
+   </div>
+   <div class="actions"><button class="btn btn-gold" type="submit">Save Reconciliation</button></div>
+  </form>
+ </div>
+ <div class="panel">
+  <h3>Historical Reconciliation Register</h3>
+  <div class="table-wrap"><table>
+   <thead><tr><th>Reference</th><th>Date</th><th>Customer</th><th>Source</th><th>Rate</th><th>Destination</th><th>Converted</th><th>Charges</th><th>Status</th><th>Action</th></tr></thead>
+   <tbody id="reconciliationTable"></tbody>
+  </table></div>
+ </div>
+</section>
+
+<section id="finance" class="page">
+ <div class="page-heading"><h2>Financial Overview</h2></div>
+ <div class="stats">
+  <div class="stat"><span>TOTAL INVOICED</span><strong id="financeInvoiced">0</strong></div>
+  <div class="stat"><span>TOTAL RECEIVED</span><strong id="financeReceived">0</strong></div>
+  <div class="stat"><span>OUTSTANDING</span><strong id="financeBalance">0</strong></div>
+  <div class="stat"><span>RECONCILIATIONS</span><strong id="financeReconciliations">0</strong></div>
+ </div>
+ <div class="panel">
+  <h3>Customer Account Balances</h3>
+  <div class="table-wrap"><table>
+   <thead><tr><th>Customer</th><th>Currency</th><th>Invoiced</th><th>Received</th><th>Outstanding</th></tr></thead>
+   <tbody id="customerBalances"></tbody>
+  </table></div>
+ </div>
+</section>
+
+<section id="geography" class="page">
+ <div class="page-heading"><h2>International Operations & Geography</h2></div>
+ <div class="panel">
+  <h3>Eight-Country Operating Network</h3>
+  <div class="table-wrap"><table>
+   <thead><tr><th>Country</th><th>Currency</th><th>Code</th></tr></thead>
+   <tbody id="countryTable"></tbody>
+  </table></div>
+ </div>
+ <div class="panel">
+  <h3>Geographical Selection</h3>
+  <div class="form-grid">
+   <div class="field"><label>Country</label><select id="geoCountry"></select></div>
+   <div class="field"><label>Region / Province</label><select id="geoRegion"></select></div>
+   <div class="field"><label>City / Municipality / District</label><select id="geoDistrict"></select></div>
+   <div class="field"><label>Town / Area</label><input id="geoTown"></div>
+   <div class="field"><label>Ward</label><input id="geoWard"></div>
+   <div class="field"><label>Street / Mtaa</label><input id="geoStreet"></div>
+   <div class="field full"><label>Specific Service Location</label><input id="geoLocation"></div>
+  </div>
+ </div>
+ <div class="panel">
+  <h3>Tanzania — 31 Mainland Regions</h3>
+  <div id="tanzaniaRegions" class="cards"></div>
+ </div>
+</section>
+
+<section id="travel" class="page">
+ <div class="page-heading"><h2>Travel & Event Operations</h2></div>
+ <div class="panel">
+  <h3>Register Travel / Event Assignment</h3>
+  <form id="travelForm">
+   <div class="form-grid">
+    <div class="field"><label>Assignment Title</label><input id="travelTitle" required></div>
+    <div class="field"><label>Customer / Partner</label><select id="travelCustomer"></select></div>
+    <div class="field"><label>Country</label><select id="travelCountry"></select></div>
+    <div class="field"><label>Origin</label><input id="travelOrigin"></div>
+    <div class="field"><label>Destination</label><input id="travelDestination" required></div>
+    <div class="field"><label>Departure Date</label><input type="date" id="travelDeparture"></div>
+    <div class="field"><label>Return Date</label><input type="date" id="travelReturn"></div>
+    <div class="field"><label>Responsible Unit</label><select id="travelUnit"></select></div>
+    <div class="field"><label>Estimated Budget</label><input type="number" id="travelBudget" min="0"></div>
+    <div class="field"><label>Currency</label><select id="travelCurrency"></select></div>
+    <div class="field"><label>Status</label><select id="travelStatus"><option>Planning</option><option>Approved</option><option>In Progress</option><option>Completed</option><option>Cancelled</option></select></div>
+    <div class="field full"><label>Operational Notes</label><textarea id="travelNotes"></textarea></div>
+   </div>
+   <div class="actions"><button class="btn btn-gold" type="submit">Save Assignment</button></div>
+  </form>
+ </div>
+ <div class="panel">
+  <h3>Travel & Event Register</h3>
+  <div class="table-wrap"><table>
+   <thead><tr><th>Reference</th><th>Assignment</th><th>Customer</th><th>Country</th><th>Destination</th><th>Departure</th><th>Budget</th><th>Status</th><th>Action</th></tr></thead>
+   <tbody id="travelTable"></tbody>
+  </table></div>
+ </div>
+</section>
+
+<section id="legal" class="page">
+ <div class="page-heading"><h2>LEGAL360</h2></div>
+ <div class="notice">LEGAL360 — contract administration, legal documentation, obligations, compliance tracking and legal records.</div>
+ <div class="panel">
+  <h3>Legal Record Registration</h3>
+  <form id="legalForm">
+   <div class="form-grid">
+    <div class="field"><label>Legal Reference</label><input id="legalReference" required></div>
+    <div class="field"><label>Record Type</label>
+     <select id="legalType"><option>Contract</option><option>Agreement</option><option>Memorandum of Understanding</option><option>Legal Notice</option><option>Dispute</option><option>Compliance Record</option><option>Other</option></select>
+    </div>
+    <div class="field"><label>Related Customer</label><select id="legalCustomer"></select></div>
+    <div class="field"><label>Related Contract</label><select id="legalContract"></select></div>
+    <div class="field"><label>Responsible Officer</label><input id="legalOfficer"></div>
+    <div class="field"><label>Review Date</label><input type="date" id="legalReviewDate"></div>
+    <div class="field"><label>Obligation Deadline</label><input type="date" id="legalDeadline"></div>
+    <div class="field"><label>Status</label><select id="legalStatus"><option>Open</option><option>Under Review</option><option>Compliant</option><option>Action Required</option><option>Closed</option></select></div>
+    <div class="field full"><label>Description / Legal Obligations</label><textarea id="legalDescription" required></textarea></div>
+    <div class="field full"><label>Legal Document</label><input type="file" id="legalFile" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"></div>
+   </div>
+   <div class="actions"><button class="btn btn-gold" type="submit">Save Legal Record</button></div>
+  </form>
+ </div>
+ <div class="panel">
+  <h3>LEGAL360 Register</h3>
+  <div class="table-wrap"><table>
+   <thead><tr><th>Reference</th><th>Type</th><th>Customer</th><th>Officer</th><th>Deadline</th><th>Status</th><th>Document</th><th>Action</th></tr></thead>
+   <tbody id="legalTable"></tbody>
+  </table></div>
+ </div>
+</section>
+
+<section id="media" class="page">
+ <div class="page-heading"><h2>SENGA Media & Video Centre</h2></div>
+ <div class="notice">
+  Media records support photographs, audio, video, promotional materials and event documentation.
+  Uploaded files are stored locally in this browser in this standalone version.
+  Shared cloud storage requires the connected storage service.
+ </div>
+ <div class="panel">
+  <h3>Upload Media</h3>
+  <form id="mediaForm">
+   <div class="form-grid">
+    <div class="field"><label>Media Title</label><input id="mediaTitle" required></div>
+    <div class="field"><label>Media Category</label>
+     <select id="mediaCategory"><option>Live Shows</option><option>Festivals</option><option>Corporate Events</option><option>Weddings</option><option>Concerts</option><option>Films and Drama</option><option>Advertising</option><option>General Media</option></select>
+    </div>
+    <div class="field"><label>Media Type</label>
+     <select id="mediaType"><option>Video</option><option>Image</option><option>Audio</option><option>Document</option></select>
+    </div>
+    <div class="field"><label>Event Date</label><input type="date" id="mediaDate"></div>
+    <div class="field full"><label>Select Media File</label><input type="file" id="mediaFile" accept="video/*,image/*,audio/*,.pdf" required></div>
+    <div class="field full"><label>Description</label><textarea id="mediaDescription"></textarea></div>
+   </div>
+   <div class="actions"><button class="btn btn-gold" type="submit">Upload Media</button></div>
+  </form>
+ </div>
+ <div class="panel">
+  <h3>Media Library</h3>
+  <div id="mediaLibrary" class="cards"></div>
+ </div>
+ <div class="panel">
+  <h3>Media Playback / Preview</h3>
+  <div id="mediaPlayer">Select a media item from the library to preview it.</div>
+ </div>
+</section>
+
+<section id="reports" class="page">
+ <div class="page-heading"><h2>Reports & Registers</h2></div>
+ <div class="panel">
+  <h3>Data Export and Backup</h3>
+  <p>Export operational registers in JSON or CSV format.</p>
+  <div class="actions">
+   <button class="btn" onclick="exportJSON()">Download Complete JSON Backup</button>
+   <button class="btn btn-green" onclick="exportCSV('customers')">Export Customers CSV</button>
+   <button class="btn btn-green" onclick="exportCSV('requests')">Export Requests CSV</button>
+   <button class="btn btn-green" onclick="exportCSV('payments')">Export Payments CSV</button>
+   <button class="btn btn-light" onclick="window.print()">Print Reports</button>
+  </div>
+ </div>
+ <div class="panel">
+  <h3>System Activity</h3>
+  <div class="table-wrap"><table>
+   <thead><tr><th>Date & Time</th><th>Activity</th><th>Record</th><th>Details</th></tr></thead>
+   <tbody id="activityTable"></tbody>
+  </table></div>
+ </div>
+</section>
+
+<footer>
+ SENGA Integrated Operations Management System |
+ Developed by AAMush Technologies
+</footer>
+
+</main>
+</div>
+
+<div id="toast"></div>
+<script>
+"use strict";
+
+/* =========================================
+   SENGA MASTER DATA
+========================================= */
+
+const SENGA_SERVICES = [
+ "Live Shows",
+ "Festival Entertainment",
+ "Corporate Events",
+ "Government and Institutional Events",
+ "Wedding Ceremonies",
+ "Family Celebrations",
+ "Concerts",
+ "Social Events",
+ "Television Programmes",
+ "Radio Programmes",
+ "Films and Drama",
+ "Commercial Advertising",
+ "Commercial Partnerships",
+ "International Events",
+ "Arts and Creative Consultancy",
+ "Special Services"
+];
+
+const SENGA_COUNTRIES = [
+ {name:"Tanzania",currency:"TZS",code:"TZ"},
+ {name:"Kenya",currency:"KES",code:"KE"},
+ {name:"Uganda",currency:"UGX",code:"UG"},
+ {name:"Rwanda",currency:"RWF",code:"RW"},
+ {name:"Burundi",currency:"BIF",code:"BI"},
+ {name:"Malawi",currency:"MWK",code:"MW"},
+ {name:"Zambia",currency:"ZMW",code:"ZM"},
+ {name:"Zimbabwe",currency:"USD",code:"ZW"}
+];
+
+/*
+  The AT01–AT16 identifiers are retained.
+  Unit names are deliberately kept as numbered labels
+  where the original approved names are not present
+  in the recovered project specification.
+*/
+
+const SENGA_UNITS = Array.from({length:16},(_,i)=>({
+ id:"AT"+String(i+1).padStart(2,"0"),
+ name:"Management Unit "+String(i+1).padStart(2,"0"),
+ description:"Operational management and assigned workflow",
+ workflow:["Received","Assigned","In Progress","Under Review","Completed"],
+ records:[]
+}));
+
+/* =========================================
+   TANZANIA MAINLAND — 31 REGIONS
+========================================= */
+
+const TANZANIA_REGIONS = [
+ "Arusha",
+ "Dar es Salaam",
+ "Dodoma",
+ "Geita",
+ "Iringa",
+ "Kagera",
+ "Katavi",
+ "Kigoma",
+ "Kilimanjaro",
+ "Lindi",
+ "Manyara",
+ "Mara",
+ "Mbeya",
+ "Morogoro",
+ "Mtwara",
+ "Mwanza",
+ "Njombe",
+ "Pemba North",
+ "Pemba South",
+ "Pwani",
+ "Rukwa",
+ "Ruvuma",
+ "Shinyanga",
+ "Simiyu",
+ "Singida",
+ "Songwe",
+ "Tabora",
+ "Tanga",
+ "Unguja North",
+ "Unguja South",
+ "Unguja West"
+];
+
+/*
+  The mainland regions are listed separately for
+  the mainland selection. Zanzibar administrative
+  regions are retained in the wider Tanzania list.
+  The full administrative council and ward dataset
+  must be maintained separately from this region list.
+*/
+
+const TANZANIA_MAINLAND_REGIONS = [
+ "Arusha","Dar es Salaam","Dodoma","Geita","Iringa",
+ "Kagera","Katavi","Kigoma","Kilimanjaro","Lindi",
+ "Manyara","Mara","Mbeya","Morogoro","Mtwara",
+ "Mwanza","Njombe","Pwani","Rukwa","Ruvuma",
+ "Shinyanga","Simiyu","Singida","Songwe","Tabora","Tanga"
+];
+
+/* =========================================
+   APPLICATION DATABASE
+========================================= */
+
+const DB_KEY = "SENGA_OPERATIONS_DATABASE_V1";
+
+const emptyDatabase = {
+ customers:[],
+ requests:[],
+ bookings:[],
+ contracts:[],
+ payments:[],
+ reconciliations:[],
+ travel:[],
+ legal:[],
+ media:[],
+ activities:[],
+ unitRecords:[]
+};
+
+let db = loadDatabase();
+
+function loadDatabase(){
+ try{
+  const saved=localStorage.getItem(DB_KEY);
+  if(!saved) return structuredClone(emptyDatabase);
+  const parsed=JSON.parse(saved);
+  return {...structuredClone(emptyDatabase),...parsed};
+ }catch(error){
+  console.error("SENGA database loading error:",error);
+  return structuredClone(emptyDatabase);
+ }
+}
+
+function saveDatabase(){
+ try{
+  localStorage.setItem(DB_KEY,JSON.stringify(db));
+  refreshDashboard();
+ }catch(error){
+  console.error(error);
+  notify("Storage limit reached. Export a backup before continuing.");
+ }
+}
+
+function nextNumber(prefix,collection){
+ return prefix+"-"+String(Date.now()).slice(-8)+"-"+String(collection.length+1).padStart(3,"0");
+}
+
+function byId(id){
+ return document.getElementById(id);
+}
+
+function value(id){
+ return byId(id)?.value?.trim() || "";
+}
+
+function numberValue(id){
+ return Number(value(id)) || 0;
+}
+
+function today(){
+ return new Date().toISOString().slice(0,10);
+}
+
+function escapeHTML(input){
+ return String(input??"").replace(/[&<>"']/g,char=>({
+  "&":"&amp;",
+  "<":"&lt;",
+  ">":"&gt;",
+  '"':"&quot;",
+  "'":"&#039;"
+ })[char]);
+}
+
+function money(amount,currency){
+ return Number(amount||0).toLocaleString("en-US",{
+  minimumFractionDigits:2,
+  maximumFractionDigits:2
+ })+" "+(currency||"");
+}
+
+function notify(message){
+ const box=byId("toast");
+ if(!box)return;
+ box.textContent=message;
+ box.style.display="block";
+ clearTimeout(window.sengaToastTimer);
+ window.sengaToastTimer=setTimeout(()=>box.style.display="none",3500);
+}
+
+function logActivity(activity,record,details){
+ db.activities.unshift({
+  date:new Date().toLocaleString(),
+  activity,
+  record,
+  details
+ });
+ db.activities=db.activities.slice(0,500);
+ saveDatabase();
+ renderActivity();
+}
+
+/* =========================================
+   NAVIGATION
+========================================= */
+
+function showPage(pageId,button){
+ document.querySelectorAll(".page").forEach(page=>{
+  page.classList.remove("active");
+ });
+ const target=byId(pageId);
+ if(target)target.classList.add("active");
+
+ document.querySelectorAll(".nav-button").forEach(btn=>{
+  btn.classList.remove("active");
+ });
+ if(button)button.classList.add("active");
+
+ window.scrollTo({top:0,behavior:"smooth"});
+ refreshDashboard();
+}
+
+function setLanguage(language){
+ localStorage.setItem("SENGA_LANGUAGE",language);
+ notify(language==="sw"?"Lugha imechaguliwa: Kiswahili":"Language selected: English");
+}
+
+/* =========================================
+   MASTER SELECT LISTS
+========================================= */
+
+function populateSelect(id,items,placeholder="Select"){
+ const select=byId(id);
+ if(!select)return;
+
+ const previous=select.value;
+ select.innerHTML="";
+
+ const first=document.createElement("option");
+ first.value="";
+ first.textContent=placeholder;
+ select.appendChild(first);
+
+ items.forEach(item=>{
+  const option=document.createElement("option");
+  option.value=typeof item==="string"?item:item.value;
+  option.textContent=typeof item==="string"?item:item.label;
+  select.appendChild(option);
+ });
+
+ if(items.some(item=>(typeof item==="string"?item:item.value)===previous)){
+  select.value=previous;
+ }
+}
+
+function countryNames(){
+ return SENGA_COUNTRIES.map(country=>country.name);
+}
+
+function currencyNames(){
+ return [...new Set(SENGA_COUNTRIES.map(country=>country.currency))];
+}
+
+function fillMasterSelects(){
+ const countries=countryNames();
+ const currencies=currencyNames();
+
+ [
+  "customerCountry","requestCountry","bookingCountry",
+  "geoCountry","travelCountry"
+ ].forEach(id=>populateSelect(id,countries,"Select country"));
+
+ [
+  "requestCurrency","bookingCurrency","contractCurrency",
+  "paymentCurrency","reconSourceCurrency",
+  "reconDestinationCurrency","travelCurrency"
+ ].forEach(id=>populateSelect(id,currencies,"Select currency"));
+
+ const services=SENGA_SERVICES;
+ [
+  "requestService","bookingService"
+ ].forEach(id=>populateSelect(id,services,"Select service"));
+
+ [
+  "requestUnit","bookingUnit","contractUnit","travelUnit"
+ ].forEach(id=>populateSelect(id,
+  SENGA_UNITS.map(u=>({value:u.id,label:u.id+" — "+u.name})),
+  "Select management unit"
+ ));
+
+ const customers=db.customers.map(c=>({
+  value:c.id,label:c.name+" ("+c.id+")"
+ }));
+
+ [
+  "requestCustomer","bookingCustomer","contractCustomer",
+  "paymentCustomer","reconCustomer","travelCustomer",
+  "legalCustomer"
+ ].forEach(id=>populateSelect(id,customers,"Select customer"));
+
+ const requests=db.requests.map(r=>({
+  value:r.id,label:r.id+" — "+r.customerName
+ }));
+
+ ["bookingRequest","contractRequest","paymentRequest","legalRequest"]
+ .forEach(id=>populateSelect(id,requests,"Select request"));
+
+ const contracts=db.contracts.map(c=>({
+  value:c.id,label:c.id+" — "+c.title
+ }));
+
+ ["paymentContract","legalContract"]
+ .forEach(id=>populateSelect(id,contracts,"Select contract"));
+}
+
+/* =========================================
+   COUNTRY / REGION CASCADING SELECTION
+========================================= */
+
+function updateCountryCurrency(countrySelect,currencySelect){
+ const country=SENGA_COUNTRIES.find(c=>c.name===value(countrySelect));
+ if(country && byId(currencySelect)){
+  byId(currencySelect).value=country.currency;
+ }
+}
+
+function populateTanzaniaRegions(){
+ [
+  "customerRegion","requestRegion","geoRegion"
+ ].forEach(id=>populateSelect(
+  id,TANZANIA_MAINLAND_REGIONS,"Select region"
+ ));
+}
+
+function countryChanged(countryId,currencyId){
+ const country=value(countryId);
+ const currency=SENGA_COUNTRIES.find(c=>c.name===country);
+ if(currency && byId(currencyId)){
+  byId(currencyId).value=currency.currency;
+ }
+ const regionIds={
+  customerCountry:"customerRegion",
+  requestCountry:"requestRegion",
+  geoCountry:"geoRegion"
+ };
+ const regionId=regionIds[countryId];
+ if(regionId){
+  populateSelect(regionId,
+   country==="Tanzania"?TANZANIA_MAINLAND_REGIONS:[],
+   country==="Tanzania"?"Select region":"Regional dataset not configured"
+  );
+ }
+}
+
+[
+ ["customerCountry","customerRegion",""],
+ ["requestCountry","requestRegion","requestCurrency"],
+ ["geoCountry","geoRegion",""]
+].forEach(([countryId,regionId,currencyId])=>{
+ byId(countryId)?.addEventListener("change",()=>{
+  const country=value(countryId);
+  if(currencyId)updateCountryCurrency(countryId,currencyId);
+  populateSelect(regionId,
+   country==="Tanzania"?TANZANIA_MAINLAND_REGIONS:[],
+   "Select region"
+  );
+ });
+});
+
+[
+ ["customerRegion","customerDistrict"],
+ ["requestRegion","requestDistrict"],
+ ["geoRegion","geoDistrict"]
+].forEach(([regionId,districtId])=>{
+ byId(regionId)?.addEventListener("change",()=>{
+  populateSelect(districtId,[],"Select district / city");
+ });
+});
+
+/* =========================================
+   SERVICE AND MANAGEMENT PORTFOLIOS
+========================================= */
+
+function renderServices(){
+ ["dashboardServices","allServices"].forEach(id=>{
+  const container=byId(id);
+  if(!container)return;
+  container.innerHTML=SENGA_SERVICES.map((service,index)=>`
+   <button class="module-card" type="button"
+    onclick="openService(${index})">
+    <strong>${String(index+1).padStart(2,"0")}. ${escapeHTML(service)}</strong>
+    <span class="muted">Create and manage service requests</span>
+   </button>
+  `).join("");
+ });
+}
+
+function openService(index){
+ const service=SENGA_SERVICES[index];
+ showPage("requests");
+ if(byId("requestService"))byId("requestService").value=service;
+}
+
+function renderUnits(){
+ ["dashboardUnits","allUnits"].forEach(id=>{
+  const container=byId(id);
+  if(!container)return;
+  container.innerHTML=SENGA_UNITS.map(unit=>`
+   <button class="module-card" type="button"
+    onclick="openUnit('${unit.id}')">
+    <strong>${unit.id}</strong>
+    <span>${escapeHTML(unit.name)}</span>
+    <span class="muted">Operational workflow and records</span>
+   </button>
+  `).join("");
+ });
+}
+
+function openUnit(unitId){
+ const unit=SENGA_UNITS.find(u=>u.id===unitId);
+ if(!unit)return;
+
+ const records=db.unitRecords.filter(r=>r.unitId===unitId);
+ const message=unit.id+" — "+unit.name+
+  "\\nRecords assigned: "+records.length+
+  "\\nWorkflow: "+unit.workflow.join(" → ");
+
+ alert(message);
+}
+</script>
+<script>
+/* =========================================
+   CUSTOMER REGISTRATION
+========================================= */
+
+byId("customerForm").addEventListener("submit",function(e){
+ e.preventDefault();
+
+ const customer={
+  id:nextNumber("CUS",db.customers),
+  type:value("customerType"),
+  name:value("customerName"),
+  phone:value("customerPhone"),
+  email:value("customerEmail"),
+  country:value("customerCountry"),
+  region:value("customerRegion"),
+  district:value("customerDistrict"),
+  town:value("customerTown"),
+  ward:value("customerWard"),
+  street:value("customerStreet"),
+  address:value("customerAddress"),
+  notes:value("customerNotes"),
+  date:today()
+ };
+
+ db.customers.push(customer);
+ saveDatabase();
+ this.reset();
+ renderCustomers();
+ fillMasterSelects();
+ logActivity("Customer registered",customer.id,customer.name);
+ notify("Customer successfully registered.");
+});
+
+function renderCustomers(){
+ const tbody=byId("customerTable");
+ if(!tbody)return;
+
+ tbody.innerHTML=db.customers.map(c=>`
+ <tr>
+  <td>${escapeHTML(c.id)}</td>
+  <td>${escapeHTML(c.name)}</td>
+  <td>${escapeHTML(c.type)}</td>
+  <td>${escapeHTML(c.phone)}</td>
+  <td>${escapeHTML(c.country)}</td>
+  <td>${escapeHTML([c.region,c.district,c.town].filter(Boolean).join(", "))}</td>
+  <td>${escapeHTML(c.date)}</td>
+  <td><button class="btn btn-small btn-red" onclick="deleteRecord('customers','${c.id}')">Delete</button></td>
+ </tr>`).join("")||'<tr><td colspan="8">No customers registered.</td></tr>';
+}
+
+/* =========================================
+   SERVICE REQUEST WORKFLOW
+========================================= */
+
+byId("requestForm").addEventListener("submit",function(e){
+ e.preventDefault();
+
+ const customer=db.customers.find(c=>c.id===value("requestCustomer"));
+ if(!customer){
+  notify("Register or select a customer first.");
+  return;
+ }
+
+ const request={
+  id:nextNumber("REQ",db.requests),
+  customerId:customer.id,
+  customerName:customer.name,
+  service:value("requestService"),
+  country:value("requestCountry"),
+  region:value("requestRegion"),
+  district:value("requestDistrict"),
+  area:value("requestArea"),
+  date:value("requestDate"),
+  fees:numberValue("requestFees"),
+  currency:value("requestCurrency"),
+  unit:value("requestUnit"),
+  priority:value("requestPriority"),
+  deadline:value("requestDeadline"),
+  description:value("requestDescription"),
+  status:"Pending",
+  created:new Date().toISOString()
+ };
+
+ db.requests.push(request);
+ saveDatabase();
+ this.reset();
+ renderRequests();
+ fillMasterSelects();
+ logActivity("Service request created",request.id,request.customerName);
+ notify("Service request registered.");
+});
+
+function renderRequests(){
+ const tbody=byId("requestTable");
+ if(!tbody)return;
+
+ tbody.innerHTML=db.requests.map(r=>`
+ <tr>
+  <td>${escapeHTML(r.id)}</td>
+  <td>${escapeHTML(r.customerName)}</td>
+  <td>${escapeHTML(r.service)}</td>
+  <td>${escapeHTML(r.area)}</td>
+  <td>${escapeHTML(r.date)}</td>
+  <td>${money(r.fees,r.currency)}</td>
+  <td><span class="badge ${r.status==="Completed"?"completed":r.status==="Approved"?"approved":"pending"}">${escapeHTML(r.status)}</span></td>
+  <td>
+   <button class="btn btn-small" onclick="advanceRequest('${r.id}')">Update</button>
+   <button class="btn btn-small btn-light" onclick="downloadRecord('requests','${r.id}')">Download</button>
+  </td>
+ </tr>`).join("")||'<tr><td colspan="8">No service requests registered.</td></tr>';
+
+ const recent=byId("dashboardRecentRequests");
+ if(recent){
+  recent.innerHTML=db.requests.slice(-5).reverse().map(r=>`
+   <tr>
+    <td>${escapeHTML(r.id)}</td>
+    <td>${escapeHTML(r.customerName)}</td>
+    <td>${escapeHTML(r.service)}</td>
+    <td>${escapeHTML(r.area)}</td>
+    <td>${escapeHTML(r.date)}</td>
+    <td>${money(r.fees,r.currency)}</td>
+    <td>${escapeHTML(r.status)}</td>
+    <td><button class="btn btn-small" onclick="advanceRequest('${r.id}')">Update</button></td>
+   </tr>`).join("");
+ }
+}
+
+function advanceRequest(id){
+ const record=db.requests.find(r=>r.id===id);
+ if(!record)return;
+
+ const statuses=["Pending","Assigned","In Progress","Under Review","Approved","Completed","Cancelled"];
+ const next=statuses.indexOf(record.status);
+ const choice=prompt(
+  "Update request status:\n"+statuses.map((s,i)=>(i+1)+". "+s).join("\n"),
+  String(Math.max(1,next+2))
+ );
+ const selected=statuses[Number(choice)-1];
+ if(!selected)return;
+
+ record.status=selected;
+ saveDatabase();
+ renderRequests();
+ logActivity("Request status updated",id,selected);
+}
+
+/* =========================================
+   BOOKING WORKFLOW
+========================================= */
+
+byId("bookingForm").addEventListener("submit",function(e){
+ e.preventDefault();
+
+ const customer=db.customers.find(c=>c.id===value("bookingCustomer"));
+ if(!customer)return notify("Select a registered customer.");
+
+ const booking={
+  id:nextNumber("BKG",db.bookings),
+  customerId:customer.id,
+  customerName:customer.name,
+  requestId:value("bookingRequest"),
+  service:value("bookingService"),
+  date:value("bookingDate"),
+  time:value("bookingTime"),
+  country:value("bookingCountry"),
+  location:value("bookingLocation"),
+  fee:numberValue("bookingFee"),
+  currency:value("bookingCurrency"),
+  unit:value("bookingUnit"),
+  notes:value("bookingNotes"),
+  status:"Pending"
+ };
+
+ db.bookings.push(booking);
+ saveDatabase();
+ this.reset();
+ renderBookings();
+ fillMasterSelects();
+ logActivity("Booking created",booking.id,booking.customerName);
+ notify("Booking successfully saved.");
+});
+
+function renderBookings(){
+ const tbody=byId("bookingTable");
+ if(!tbody)return;
+
+ tbody.innerHTML=db.bookings.map(b=>`
+ <tr>
+  <td>${escapeHTML(b.id)}</td>
+  <td>${escapeHTML(b.customerName)}</td>
+  <td>${escapeHTML(b.service)}</td>
+  <td>${escapeHTML(b.date)}</td>
+  <td>${escapeHTML(b.time)}</td>
+  <td>${escapeHTML(b.location)}</td>
+  <td>${money(b.fee,b.currency)}</td>
+  <td><span class="badge ${b.status==="Confirmed"?"approved":"pending"}">${escapeHTML(b.status)}</span></td>
+  <td>
+   <button class="btn btn-small" onclick="updateBooking('${b.id}')">Update</button>
+   <button class="btn btn-small btn-light" onclick="downloadRecord('bookings','${b.id}')">Download</button>
+  </td>
+ </tr>`).join("")||'<tr><td colspan="9">No bookings recorded.</td></tr>';
+}
+
+function updateBooking(id){
+ const b=db.bookings.find(x=>x.id===id);
+ if(!b)return;
+ const statuses=["Pending","Confirmed","In Progress","Completed","Cancelled"];
+ const choice=prompt("Select status:\n"+statuses.join("\n"),"Confirmed");
+ if(!choice||!statuses.includes(choice))return;
+ b.status=choice;
+ saveDatabase();
+ renderBookings();
+ logActivity("Booking updated",id,choice);
+}
+
+/* =========================================
+   CONTRACT WORKFLOW
+========================================= */
+
+byId("contractForm").addEventListener("submit",function(e){
+ e.preventDefault();
+
+ const customer=db.customers.find(c=>c.id===value("contractCustomer"));
+ if(!customer)return notify("Select a registered customer.");
+
+ const file=byId("contractFile").files[0];
+
+ const contract={
+  id:nextNumber("CON",db.contracts),
+  customerId:customer.id,
+  customerName:customer.name,
+  requestId:value("contractRequest"),
+  title:value("contractTitle"),
+  reference:value("contractReference"),
+  amount:numberValue("contractValue"),
+  currency:value("contractCurrency"),
+  start:value("contractStart"),
+  end:value("contractEnd"),
+  unit:value("contractUnit"),
+  status:value("contractStatus"),
+  terms:value("contractTerms"),
+  fileName:file?file.name:"",
+  created:new Date().toISOString()
+ };
+
+ db.contracts.push(contract);
+ saveDatabase();
+ this.reset();
+ renderContracts();
+ fillMasterSelects();
+ logActivity("Contract registered",contract.id,contract.title);
+ notify("Contract registered. Attachments require document storage configuration.");
+});
+
+function renderContracts(){
+ const tbody=byId("contractTable");
+ if(!tbody)return;
+
+ tbody.innerHTML=db.contracts.map(c=>`
+ <tr>
+  <td>${escapeHTML(c.id)}</td>
+  <td>${escapeHTML(c.customerName)}</td>
+  <td>${escapeHTML(c.title)}</td>
+  <td>${money(c.amount,c.currency)}</td>
+  <td>${escapeHTML(c.start)}</td>
+  <td>${escapeHTML(c.end)}</td>
+  <td>${escapeHTML(c.status)}</td>
+  <td>${escapeHTML(c.fileName||"Not attached")}</td>
+  <td><button class="btn btn-small btn-light" onclick="downloadRecord('contracts','${c.id}')">Download Record</button></td>
+ </tr>`).join("")||'<tr><td colspan="9">No contracts registered.</td></tr>';
+}
+
+/* =========================================
+   PAYMENT AND PARTIAL PAYMENT WORKFLOW
+========================================= */
+
+byId("paymentForm").addEventListener("submit",function(e){
+ e.preventDefault();
+
+ const customer=db.customers.find(c=>c.id===value("paymentCustomer"));
+ if(!customer)return notify("Select a customer.");
+
+ const payment={
+  id:nextNumber("PAY",db.payments),
+  customerId:customer.id,
+  customerName:customer.name,
+  requestId:value("paymentRequest"),
+  contractId:value("paymentContract"),
+  date:value("paymentDate"),
+  amount:numberValue("paymentAmount"),
+  currency:value("paymentCurrency"),
+  method:value("paymentMethod"),
+  bank:value("paymentBank"),
+  reference:value("paymentReference"),
+  type:value("paymentType"),
+  description:value("paymentDescription"),
+  created:new Date().toISOString()
+ };
+
+ db.payments.push(payment);
+ saveDatabase();
+ this.reset();
+ renderPayments();
+ fillMasterSelects();
+ logActivity("Payment recorded",payment.id,payment.customerName);
+ notify("Payment recorded successfully.");
+});
+
+function renderPayments(){
+ const tbody=byId("paymentTable");
+ if(!tbody)return;
+
+ tbody.innerHTML=db.payments.map(p=>`
+ <tr>
+  <td>${escapeHTML(p.id)}</td>
+  <td>${escapeHTML(p.customerName)}</td>
+  <td>${escapeHTML(p.date)}</td>
+  <td>${money(p.amount,p.currency)}</td>
+  <td>${escapeHTML(p.currency)}</td>
+  <td>${escapeHTML(p.method)}</td>
+  <td>${escapeHTML(p.reference)}</td>
+  <td><button class="btn btn-small btn-light" onclick="downloadRecord('payments','${p.id}')">Receipt</button></td>
+ </tr>`).join("")||'<tr><td colspan="8">No payments recorded.</td></tr>';
+}
+
+function calculateCustomerBalances(){
+ const balances={};
+
+ db.requests.forEach(r=>{
+  const key=r.customerId+"|"+r.currency;
+  if(!balances[key]){
+   balances[key]={
+    customer:r.customerName,
+    currency:r.currency,
+    invoiced:0,
+    received:0
+   };
+  }
+  balances[key].invoiced+=Number(r.fees||0);
+ });
+
+ db.payments.forEach(p=>{
+  const key=p.customerId+"|"+p.currency;
+  if(!balances[key]){
+   balances[key]={
+    customer:p.customerName,
+    currency:p.currency,
+    invoiced:0,
+    received:0
+   };
+  }
+  balances[key].received+=Number(p.amount||0);
+ });
+
+ return Object.values(balances).map(b=>({
+  ...b,
+  outstanding:b.invoiced-b.received
+ }));
+}
+
+function renderBalances(){
+ const balances=calculateCustomerBalances();
+ const tbody=byId("customerBalances");
+ if(tbody){
+  tbody.innerHTML=balances.map(b=>`
+   <tr>
+    <td>${escapeHTML(b.customer)}</td>
+    <td>${escapeHTML(b.currency)}</td>
+    <td>${money(b.invoiced,b.currency)}</td>
+    <td>${money(b.received,b.currency)}</td>
+    <td>${money(b.outstanding,b.currency)}</td>
+   </tr>`).join("")||'<tr><td colspan="5">No account records.</td></tr>';
+ }
+ return balances;
+}
+
+/* =========================================
+   BANK CONVERSION AND RECONCILIATION
+========================================= */
+
+function calculateConversion(){
+ const amount=numberValue("reconSourceAmount");
+ const rate=numberValue("reconRate");
+ const charges=numberValue("reconCharges");
+ const result=amount*rate-charges;
+ if(byId("reconConvertedAmount")){
+  byId("reconConvertedAmount").value=
+   result>=0?result.toFixed(2):"0.00";
+ }
+}
+
+["reconSourceAmount","reconRate","reconCharges"].forEach(id=>{
+ byId(id)?.addEventListener("input",calculateConversion);
+});
+
+byId("reconciliationForm").addEventListener("submit",function(e){
+ e.preventDefault();
+
+ const amount=numberValue("reconSourceAmount");
+ const rate=numberValue("reconRate");
+ const charges=numberValue("reconCharges");
+
+ if(amount<=0||rate<=0)return notify("Enter valid amount and exchange rate.");
+ if(charges>amount*rate)return notify("Charges exceed converted amount.");
+
+ const record={
+  id:nextNumber("REC",db.reconciliations),
+  reference:value("reconReference"),
+  date:value("reconDate"),
+  customerId:value("reconCustomer"),
+  sourceCurrency:value("reconSourceCurrency"),
+  sourceAmount:amount,
+  rate:rate,
+  destinationCurrency:value("reconDestinationCurrency"),
+  convertedAmount:amount*rate-charges,
+  charges:charges,
+  account:value("reconAccount"),
+  status:value("reconStatus"),
+  statement:value("reconStatement"),
+  notes:value("reconNotes")
+ };
+
+ db.reconciliations.push(record);
+ saveDatabase();
+ this.reset();
+ renderReconciliations();
+ logActivity("Bank reconciliation recorded",record.id,record.status);
+ notify("Reconciliation record saved.");
+});
+
+function renderReconciliations(){
+ const tbody=byId("reconciliationTable");
+ if(!tbody)return;
+
+ tbody.innerHTML=db.reconciliations.map(r=>`
+ <tr>
+  <td>${escapeHTML(r.reference)}</td>
+  <td>${escapeHTML(r.date)}</td>
+  <td>${escapeHTML(r.customerId)}</td>
+  <td>${money(r.sourceAmount,r.sourceCurrency)}</td>
+  <td>${escapeHTML(r.rate)}</td>
+  <td>${escapeHTML(r.destinationCurrency)}</td>
+  <td>${money(r.convertedAmount,r.destinationCurrency)}</td>
+  <td>${money(r.charges,r.destinationCurrency)}</td>
+  <td>${escapeHTML(r.status)}</td>
+  <td><button class="btn btn-small btn-light" onclick="downloadRecord('reconciliations','${r.id}')">Download</button></td>
+ </tr>`).join("")||'<tr><td colspan="10">No reconciliation records.</td></tr>';
+}
+
+/* =========================================
+   FINANCIAL DASHBOARD
+========================================= */
+
+function refreshFinance(){
+ const balances=renderBalances();
+ const totalInvoiced=balances.reduce((s,b)=>s+b.invoiced,0);
+ const totalReceived=balances.reduce((s,b)=>s+b.received,0);
+ const totalOutstanding=balances.reduce((s,b)=>s+b.outstanding,0);
+
+ byId("financeInvoiced").textContent=totalInvoiced.toLocaleString();
+ byId("financeReceived").textContent=totalReceived.toLocaleString();
+ byId("financeBalance").textContent=totalOutstanding.toLocaleString();
+ byId("financeReconciliations").textContent=db.reconciliations.length;
+}
+</script>
+<script>
+/* =========================================
+   TRAVEL AND EVENT OPERATIONS
+========================================= */
+
+byId("travelForm").addEventListener("submit",function(e){
+ e.preventDefault();
+
+ const travel={
+  id:nextNumber("TRV",db.travel),
+  title:value("travelTitle"),
+  customerId:value("travelCustomer"),
+  country:value("travelCountry"),
+  origin:value("travelOrigin"),
+  destination:value("travelDestination"),
+  departure:value("travelDeparture"),
+  returnDate:value("travelReturn"),
+  unit:value("travelUnit"),
+  budget:numberValue("travelBudget"),
+  currency:value("travelCurrency"),
+  status:value("travelStatus"),
+  notes:value("travelNotes")
+ };
+
+ db.travel.push(travel);
+ saveDatabase();
+ this.reset();
+ renderTravel();
+ fillMasterSelects();
+ logActivity("Travel assignment registered",travel.id,travel.title);
+ notify("Travel assignment saved.");
+});
+
+function renderTravel(){
+ const tbody=byId("travelTable");
+ if(!tbody)return;
+
+ tbody.innerHTML=db.travel.map(t=>`
+ <tr>
+  <td>${escapeHTML(t.id)}</td>
+  <td>${escapeHTML(t.title)}</td>
+  <td>${escapeHTML(t.customerId)}</td>
+  <td>${escapeHTML(t.country)}</td>
+  <td>${escapeHTML(t.destination)}</td>
+  <td>${escapeHTML(t.departure)}</td>
+  <td>${money(t.budget,t.currency)}</td>
+  <td>${escapeHTML(t.status)}</td>
+  <td><button class="btn btn-small btn-light" onclick="downloadRecord('travel','${t.id}')">Download</button></td>
+ </tr>`).join("")||'<tr><td colspan="9">No travel assignments.</td></tr>';
+}
+
+/* =========================================
+   LEGAL360
+========================================= */
+
+byId("legalForm").addEventListener("submit",function(e){
+ e.preventDefault();
+
+ const legal={
+  id:nextNumber("LEG",db.legal),
+  reference:value("legalReference"),
+  type:value("legalType"),
+  customerId:value("legalCustomer"),
+  contractId:value("legalContract"),
+  officer:value("legalOfficer"),
+  reviewDate:value("legalReviewDate"),
+  deadline:value("legalDeadline"),
+  status:value("legalStatus"),
+  description:value("legalDescription"),
+  fileName:byId("legalFile").files[0]?.name||"",
+  created:new Date().toISOString()
+ };
+
+ db.legal.push(legal);
+ saveDatabase();
+ this.reset();
+ renderLegal();
+ logActivity("LEGAL360 record created",legal.id,legal.type);
+ notify("LEGAL360 record registered.");
+});
+
+function renderLegal(){
+ const tbody=byId("legalTable");
+ if(!tbody)return;
+
+ tbody.innerHTML=db.legal.map(l=>`
+ <tr>
+  <td>${escapeHTML(l.reference)}</td>
+  <td>${escapeHTML(l.type)}</td>
+  <td>${escapeHTML(l.customerId)}</td>
+  <td>${escapeHTML(l.officer)}</td>
+  <td>${escapeHTML(l.deadline)}</td>
+  <td>${escapeHTML(l.status)}</td>
+  <td>${escapeHTML(l.fileName||"Not attached")}</td>
+  <td><button class="btn btn-small btn-light" onclick="downloadRecord('legal','${l.id}')">Download</button></td>
+ </tr>`).join("")||'<tr><td colspan="8">No legal records registered.</td></tr>';
+}
+
+/* =========================================
+   MEDIA DATABASE — INDEXEDDB
+========================================= */
+
+/*
+ Media binary files are stored in IndexedDB rather
+ than localStorage. This supports larger files.
+ This remains browser-local storage, not shared
+ cloud storage across multiple devices.
+*/
+
+const MEDIA_DB_NAME="SENGA_MEDIA_DATABASE";
+const MEDIA_STORE="mediaFiles";
+let mediaDatabase=null;
+
+function openMediaDatabase(){
+ return new Promise((resolve,reject)=>{
+  if(!window.indexedDB){
+   reject(new Error("IndexedDB is not supported."));
+   return;
+  }
+
+  const request=indexedDB.open(MEDIA_DB_NAME,1);
+
+  request.onupgradeneeded=function(event){
+   const database=event.target.result;
+   if(!database.objectStoreNames.contains(MEDIA_STORE)){
+    database.createObjectStore(MEDIA_STORE,{keyPath:"id"});
+   }
+  };
+
+  request.onsuccess=function(){
+   mediaDatabase=request.result;
+   resolve(mediaDatabase);
+  };
+
+  request.onerror=function(){
+   reject(request.error);
+  };
+ });
+}
+
+async function saveMediaFile(file,id){
+ const database=await openMediaDatabase();
+
+ return new Promise((resolve,reject)=>{
+  const transaction=database.transaction(MEDIA_STORE,"readwrite");
+  const store=transaction.objectStore(MEDIA_STORE);
+
+  store.put({
+   id:id,
+   name:file.name,
+   type:file.type,
+   size:file.size,
+   blob:file,
+   saved:new Date().toISOString()
+  });
+
+  transaction.oncomplete=()=>resolve(true);
+  transaction.onerror=()=>reject(transaction.error);
+ });
+}
+
+async function getMediaFile(id){
+ const database=await openMediaDatabase();
+
+ return new Promise((resolve,reject)=>{
+  const transaction=database.transaction(MEDIA_STORE,"readonly");
+  const request=transaction.objectStore(MEDIA_STORE).get(id);
+
+  request.onsuccess=()=>resolve(request.result||null);
+  request.onerror=()=>reject(request.error);
+ });
+}
+
+async function deleteMediaFile(id){
+ const database=await openMediaDatabase();
+
+ return new Promise((resolve,reject)=>{
+  const transaction=database.transaction(MEDIA_STORE,"readwrite");
+  transaction.objectStore(MEDIA_STORE).delete(id);
+
+  transaction.oncomplete=()=>resolve(true);
+  transaction.onerror=()=>reject(transaction.error);
+ });
+
+}
+
+byId("mediaForm").addEventListener("submit",async function(e){
+ e.preventDefault();
+
+ const file=byId("mediaFile").files[0];
+ if(!file)return notify("Select a media file.");
+
+ const id=nextNumber("MED",db.media);
+
+ const record={
+  id:id,
+  title:value("mediaTitle"),
+  category:value("mediaCategory"),
+  type:value("mediaType"),
+  eventDate:value("mediaDate"),
+  description:value("mediaDescription"),
+  fileName:file.name,
+  mimeType:file.type,
+  size:file.size,
+  created:new Date().toISOString()
+ };
+
+ try{
+  await saveMediaFile(file,id);
+  db.media.push(record);
+  saveDatabase();
+  this.reset();
+  renderMedia();
+  logActivity("Media uploaded",id,record.title);
+  notify("Media saved successfully in browser storage.");
+ }catch(error){
+  console.error(error);
+  notify("Media upload failed. Check available browser storage.");
+ }
+});
+
+async function renderMedia(){
+ const container=byId("mediaLibrary");
+ if(!container)return;
+
+ container.innerHTML="";
+
+ if(!db.media.length){
+  container.textContent="No media uploaded.";
+  return;
+ }
+
+ db.media.forEach(record=>{
+  const card=document.createElement("div");
+  card.className="module-card";
+
+  const title=document.createElement("strong");
+  title.textContent=record.title;
+
+  const info=document.createElement("p");
+  info.textContent=record.type+" | "+record.fileName;
+
+  const preview=document.createElement("button");
+  preview.className="btn btn-small";
+  preview.textContent="Preview / Play";
+  preview.onclick=()=>playMedia(record.id);
+
+  const remove=document.createElement("button");
+  remove.className="btn btn-small btn-red";
+  remove.textContent="Delete";
+  remove.onclick=()=>removeMedia(record.id);
+
+  card.append(title,info,preview,remove);
+  container.appendChild(card);
+ });
+}
+
+async function playMedia(id){
+ try{
+  const file=await getMediaFile(id);
+  if(!file)throw new Error("Media file not found.");
+
+  const player=byId("mediaPlayer");
+  player.innerHTML="";
+
+  const url=URL.createObjectURL(file.blob);
+  const media=file.type;
+
+  let element;
+
+  if(media.startsWith("video/")){
+   element=document.createElement("video");
+   element.controls=true;
+   element.playsInline=true;
+  }else if(media.startsWith("audio/")){
+   element=document.createElement("audio");
+   element.controls=true;
+  }else if(media.startsWith("image/")){
+   element=document.createElement("img");
+   element.style.maxWidth="100%";
+   element.style.maxHeight="500px";
+  }else{
+   element=document.createElement("p");
+   element.textContent="This file type does not support direct playback.";
+  }
+
+  if(media.startsWith("video/")||
+     media.startsWith("audio/")||
+     media.startsWith("image/")){
+   element.src=url;
+  }
+
+  player.appendChild(element);
+
+  const download=document.createElement("a");
+  download.href=url;
+  download.download=file.name;
+  download.textContent="Download original media";
+  download.className="btn";
+  download.style.display="inline-block";
+  download.style.marginTop="12px";
+  player.appendChild(download);
+
+ }catch(error){
+  console.error(error);
+  notify("Unable to open media file.");
+ }
+}
+
+async function removeMedia(id){
+ if(!confirm("Permanently delete this media file from this browser?"))return;
+
+ try{
+  await deleteMediaFile(id);
+  db.media=db.media.filter(m=>m.id!==id);
+  saveDatabase();
+  renderMedia();
+  byId("mediaPlayer").textContent="Select a media item to preview it.";
+  logActivity("Media deleted",id,"Media removed");
+  notify("Media deleted.");
+ }catch(error){
+  notify("Media deletion failed.");
+ }
+}
+
+/* =========================================
+   RECORD MANAGEMENT
+========================================= */
+
+function deleteRecord(collection,id){
+ if(!confirm("Delete this record?"))return;
+
+ if(!Array.isArray(db[collection]))return;
+
+ db[collection]=db[collection].filter(record=>record.id!==id);
+ saveDatabase();
+
+ renderAll();
+ fillMasterSelects();
+ logActivity("Record deleted",id,collection);
+ notify("Record deleted.");
+}
+
+function downloadRecord(collection,id){
+ const record=db[collection]?.find(item=>item.id===id);
+ if(!record)return notify("Record not found.");
+
+ downloadBlob(
+  JSON.stringify(record,null,2),
+  collection+"-"+id+".json",
+  "application/json"
+ );
+}
+
+function downloadBlob(content,filename,type){
+ const blob=new Blob([content],{type:type});
+ const url=URL.createObjectURL(blob);
+ const link=document.createElement("a");
+ link.href=url;
+ link.download=filename;
+ document.body.appendChild(link);
+ link.click();
+ link.remove();
+ setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+
+/* =========================================
+   CSV EXPORT
+========================================= */
+
+function exportCSV(collection){
+ const records=db[collection];
+
+ if(!Array.isArray(records)||!records.length){
+  notify("No records available for export.");
+  return;
+ }
+
+ const columns=[...new Set(records.flatMap(r=>Object.keys(r)))];
+
+ const escapeCSV=value=>{
+  let text=String(value??"");
+  if(/^[=+\-@\t\r]/.test(text))text="'"+text;
+  return '"'+text.replace(/"/g,'""')+'"';
+ };
+
+ const csv=[
+  columns.map(escapeCSV).join(","),
+  ...records.map(record=>columns.map(key=>escapeCSV(record[key])).join(","))
+ ].join("\r\n");
+
+ downloadBlob(
+  "\uFEFF"+csv,
+  "SENGA-"+collection+"-"+today()+".csv",
+  "text/csv;charset=utf-8"
+ );
+
+ notify("CSV export generated.");
+}
+
+/* =========================================
+   FULL DATABASE BACKUP
+========================================= */
+
+function exportJSON(){
+ const backup={
+  application:"SENGA",
+  version:"1.0",
+  exported:new Date().toISOString(),
+  data:db
+ };
+
+ downloadBlob(
+  JSON.stringify(backup,null,2),
+  "SENGA-FULL-BACKUP-"+today()+".json",
+  "application/json"
+ );
+
+ notify("Database backup downloaded.");
+}
+
+/* =========================================
+   ACTIVITY REGISTER
+========================================= */
+
+function renderActivity(){
+ const tbody=byId("activityTable");
+ if(!tbody)return;
+
+ tbody.innerHTML=db.activities.map(a=>`
+ <tr>
+  <td>${escapeHTML(a.date)}</td>
+  <td>${escapeHTML(a.activity)}</td>
+  <td>${escapeHTML(a.record)}</td>
+  <td>${escapeHTML(a.details)}</td>
+ </tr>`).join("")||'<tr><td colspan="4">No activity recorded.</td></tr>';
+}
+
+/* =========================================
+   COUNTRY REGISTER
+========================================= */
+
+function renderCountries(){
+ const tbody=byId("countryTable");
+ if(!tbody)return;
+
+ tbody.innerHTML=SENGA_COUNTRIES.map(c=>`
+ <tr>
+  <td>${escapeHTML(c.name)}</td>
+  <td>${escapeHTML(c.currency)}</td>
+  <td>${escapeHTML(c.code)}</td>
+ </tr>`).join("");
+}
+
+/* =========================================
+   TANZANIA REGION DISPLAY
+========================================= */
+
+function renderTanzaniaRegions(){
+ const container=byId("tanzaniaRegions");
+ if(!container)return;
+
+ container.innerHTML=TANZANIA_REGIONS.map((region,index)=>`
+  <div class="module-card">
+   <strong>${String(index+1).padStart(2,"0")}. ${escapeHTML(region)}</strong>
+   <span class="muted">Tanzania geographical selection</span>
+  </div>
+ `).join("");
+}
+
+/* =========================================
+   DASHBOARD
+========================================= */
+
+function refreshDashboard(){
+ const stats={
+  statCustomers:db.customers.length,
+  statRequests:db.requests.length,
+  statBookings:db.bookings.length,
+  statContracts:db.contracts.length,
+  statPayments:db.payments.length,
+  statMedia:db.media.length
+ };
+
+ Object.entries(stats).forEach(([id,total])=>{
+  if(byId(id))byId(id).textContent=total;
+ });
+
+ const balances=calculateCustomerBalances();
+ const outstanding=balances.reduce((sum,b)=>sum+Math.max(0,b.outstanding),0);
+
+ if(byId("statOutstanding")){
+  byId("statOutstanding").textContent=outstanding.toLocaleString();
+ }
+
+ refreshFinance();
+}
+
+function renderAll(){
+ renderCustomers();
+ renderRequests();
+ renderBookings();
+ renderContracts();
+ renderPayments();
+ renderReconciliations();
+ renderTravel();
+ renderLegal();
+ renderMedia();
+ renderActivity();
+ renderServices();
+ renderUnits();
+ renderCountries();
+ renderTanzaniaRegions();
+ refreshDashboard();
+}
+
+/* =========================================
+   CLOCK
+========================================= */
+
+function updateClock(){
+ const clock=byId("clock");
+ if(clock){
+  clock.textContent=new Date().toLocaleString();
+ }
+}
+
+/* =========================================
+   APPLICATION INITIALISATION
+========================================= */
+
+async function initialiseSENGA(){
+ fillMasterSelects();
+ populateTanzaniaRegions();
+ renderAll();
+ updateClock();
+ setInterval(updateClock,1000);
+
+ try{
+  await openMediaDatabase();
+  await renderMedia();
+ }catch(error){
+  console.error("Media database unavailable:",error);
+ }
+
+ byId("requestDate").value=today();
+ byId("bookingDate").value=today();
+ byId("paymentDate").value=today();
+ byId("reconDate").value=today();
+
+ console.log("SENGA Operations Management System initialised.");
+}
+
+document.addEventListener("DOMContentLoaded",initialiseSENGA);
+
+</script>
+
+</body>
+</html>
