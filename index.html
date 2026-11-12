@@ -172,6 +172,75 @@ hr{border:0;border-top:1px solid var(--line);margin:18px 0}
   .page-heading{display:block}
   .page-heading .actions{margin-top:12px}
 }
+  /* SENGA DASHBOARD DISPLAY AND VISIBILITY CORRECTION */
+
+/* Ensure the main application is displayed */
+.app {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+}
+
+/* Control dashboard page visibility */
+.page {
+  display: none;
+  width: 100%;
+  min-width: 0;
+}
+
+.page.active {
+  display: block;
+  visibility: visible;
+  opacity: 1;
+}
+
+/* Ensure the main content remains visible */
+.main {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+  min-height: 100vh;
+}
+
+.content {
+  display: block;
+  flex: 1;
+  width: 100%;
+  min-width: 0;
+}
+
+/* Keep the sidebar navigation accessible */
+.sidebar {
+  flex-shrink: 0;
+}
+
+/* Prevent hidden pages from covering active pages */
+.page:not(.active) {
+  display: none !important;
+}
+
+/* Mobile display correction */
+@media (max-width: 760px) {
+  .app {
+    display: block;
+  }
+
+  .main {
+    width: 100%;
+    min-height: 100vh;
+  }
+
+  .content {
+    padding: 15px;
+  }
+
+  .page.active {
+    display: block;
+  }
+}
+
+/* END SENGA DISPLAY CORRECTION */
 </style>
 </head>
 <body>
